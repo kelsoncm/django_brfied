@@ -5,12 +5,13 @@ setup(
     packages=['django_brfied', 'django_brfied/migrations', 'django_brfied/management/commands', ],
     package_dir={'django_brfied': 'django_brfied'},
     # package_data={'django_brfied': ['django_brfied/static/js/*', 'django_brfied/*', 'django_brfied/migrations/*', 'django_brfied/management/commands/*'],},
-    version='0.5.0',
-    download_url='https://github.com/kelsoncm/django_brfied/releases/tag/0.5.0',
+    version='0.5.1',
+    download_url='https://github.com/kelsoncm/django_brfied/releases/tag/0.5.1',
     description='Django Application specific brazilian fields types',
     author='Kelson da Costa Medeiros',
     author_email='kelsoncm@gmail.com',
     url='https://github.com/kelsoncm/django_brfied',
     keywords=['django', 'BR', 'Brazil', 'Brasil', 'model', 'form', 'locale', ],
-    classifiers=[]
+    classifiers=[],
+    install_requires=['python_brfied', ],
 )
