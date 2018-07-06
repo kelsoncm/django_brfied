@@ -21,3 +21,5 @@
 #
 # @author 'Kelson da Costa Medeiros <kelsoncm@gmail.com>'
 Django>=1.7
+python_brfied==0.5.0
+

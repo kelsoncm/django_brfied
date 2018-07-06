@@ -12,9 +12,9 @@ with open('setup.py', 'w') as f:
 from distutils.core import setup
 setup(
     name='django_brfied',
-    packages=['django_brfied', 'python_brfied', ],
+    packages=['django_brfied', 'django_brfied/migrations', 'django_brfied/management/commands', ],
     package_dir={'django_brfied': 'django_brfied'},
-    package_data={'django_brfied': ['django_brfied/static/js/*', 'django_brfied/*', 'django_brfied/migrations/*', 'django_brfied/management/commands/*'],},
+    # package_data={'django_brfied': ['django_brfied/static/js/*', 'django_brfied/*', 'django_brfied/migrations/*', 'django_brfied/management/commands/*'],},
     version='%s',
     download_url='https://github.com/kelsoncm/django_brfied/releases/tag/%s',
     description='Django Application specific brazilian fields types',
