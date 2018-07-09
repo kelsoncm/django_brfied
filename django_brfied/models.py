@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The MIT License (MIT)
 
@@ -21,7 +20,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-from __future__ import unicode_literals
+import re
 from django.core.exceptions import ValidationError
 from django.db.models import Model, CharField
 from django.db.models import ForeignKey as OriginalForeignKey, ManyToManyField as OriginalManyToManyField
@@ -29,12 +28,33 @@ from python_brfied import validate_dv_by_mask, validate_mask, validate_mod11, va
 from python_brfied import only_digits, apply_mask, ValidationException
 from python_brfied import CPF_MASK, CNPJ_MASK, CEP_MASK, RegiaoChoices
 from python_brfied import SexoChoices
-from django_brfied.django_brfied import forms
-from django_brfied.django_brfied.validators import CPFValidator
+from django_brfied import forms
+from django_brfied.validators import CPFValidator
 
 # __all__ = ['MaskField', 'CPFField', 'CNPJField', 'CEPField', 'UFField', 'UnidadeFederativa', 'ForeignKey', 'Sexo']
 
 __author__ = 'Kelson da Costa Medeiros <kelsoncm@gmail.com>'
+
+
+def get_user_email_address(user):
+    fullname = user.get_full_name() if user.get_full_name else user.username
+    result = "%s <%s>" % (fullname, user.email)
+    return result
+
+
+def cpf_ou_cns_param(cpf_ou_cns, prefix=''):
+    if len(cpf_ou_cns) in (11, 14):
+        cpf = cpf_ou_cns if cpf_ou_cns == 11 else re.sub('\D', '', cpf_ou_cns)
+        try:
+            validate_dv_by_mask(cpf, CPF_MASK)
+        except ValidationException as e:
+            raise Exception('CPF inválido. Motivo: %s' % e.message)
+        return {'%scpf' % prefix: cpf}
+    elif len(cpf_ou_cns) == 15:
+        return {'%scns' % prefix: cpf_ou_cns}
+    else:
+        raise Exception('O valor informado (%s) é inválido. Se for CPF tem que ter 11 quando sem máscara ou 14 '
+                        'caracteres quando for com máscara. Se for CNS tem que tem 15, sempre sem máscara.')
 
 
 class MaskField(CharField):
@@ -190,6 +210,28 @@ class UFField(ForeignKey):
                  db_constraint=True, **kwargs):
         super(UFField, self).__init__(verbose_name, to, on_delete, related_name, related_query_name, limit_choices_to,
                                       parent_link, to_field, db_constraint, **kwargs)
+
+
+class DominioForteModel(Model):
+    codigo = CharField('Código', max_length=6, primary_key=True)
+    nome = CharField('Nome', max_length=250, db_index=True, unique=True)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return '%s - %s' % (self.pk, self.nome)
+
+
+class CodigoNomeModel(Model):
+    codigo = CharField('Código', max_length=6, null=True)
+    nome = CharField('Nome', max_length=250, db_index=True, unique=True)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return '%s - %s' % (self.pk, self.nome)
 
 
 class Municipio(Model):
