@@ -9,7 +9,7 @@ SYNOPSIS
        ./release.sh [-d|-p|-g] <version>
 
 DESCRIPTION
-       Create a new release to ege_utils python package.
+       Create a new release to django_brfied python package.
 
 OPTIONS
        -d         Deploy to Github and PyPI
@@ -34,24 +34,26 @@ create_setup_cfg_file() {
     echo """# -*- coding: utf-8 -*-
 from distutils.core import setup
 setup(
-    name='ege_utils',
-    description='Utils classes for EGE project',
+    name='django_brfied',
+    description='Django Application specific brazilian fields types',
     long_description='Utils classes for EGE project',
     license='MIT',
     author='Kelson da Costa Medeiros',
     author_email='kelsoncm@gmail.com',
-    packages=['ege_utils', 'ege_utils/templates'],
+    packages=['django_brfied', 'django_brfied/migrations', 'django_brfied/management/commands', 'django_brfied/static', ],
+    package_data = {'static': ['*'], },
+#    package_dir={'django_brfied': 'django_brfied'},
+#    packages=['ege_theme', 'ege_theme/migrations', 'ege_theme/static', 'ege_theme/templates', 'ege_theme/templatetags'],
     include_package_data=True,
     version='$1',
-    download_url='https://github.com/CoticEaDIFRN/ege_utils/releases/tag/$1',
-    url='https://github.com/CoticEaDIFRN/ege_utils',
-    keywords=['EGE', 'JWT', 'Django', 'Auth', 'SSO', 'client', ],
-    install_requires=['PyJWT==1.7.1', 'requests==2.21.0', 'django>=2.0,<3.0'],
+    download_url='https://github.com/kelsoncm/django_brfied/releases/tag/$1',
+    url='https://github.com/kelsoncm/django_brfied',
+    keywords=['django', 'BR', 'Brazil', 'Brasil', 'model', 'form', 'locale', ],
     classifiers=[]
 )
 """ > setup.py
-    docker build -t ifrn/ege.utils --force-rm .
-    docker run --rm -it -v `pwd`:/src ifrn/ege.utils python setup.py sdist
+    docker build -t kelsoncm/django_brfied --force-rm .
+    docker run --rm -it -v `pwd`:/src kelsoncm/django_brfied python setup.py sdist
 }
 
 if [[ $# -eq 1 ]]
@@ -83,7 +85,7 @@ if [[ $# -eq 2 ]] && [[ "$1" == "-d" || "$1" == "-g" || "$1" == "-p" ]]
         echo ""
         echo "PyPI Hub: Uploading"
         echo ""
-        docker run --rm -it -v `pwd`:/src ifrn/ege.utils twine upload dist/ege_utils-$2.tar.gz
+        docker run --rm -it -v `pwd`:/src kelsoncm/django_brfied twine upload dist/django_brfied-$2.tar.gz
     fi
 fi
 
