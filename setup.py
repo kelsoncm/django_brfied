@@ -12,8 +12,8 @@ setup(
 #    package_dir={'django_brfied': 'django_brfied'},
 #    packages=['ege_theme', 'ege_theme/migrations', 'ege_theme/static', 'ege_theme/templates', 'ege_theme/templatetags'],
     include_package_data=True,
-    version='0.6.0',
-    download_url='https://github.com/kelsoncm/django_brfied/releases/tag/0.6.0',
+    version='0.6.1',
+    download_url='https://github.com/kelsoncm/django_brfied/releases/tag/0.6.1',
     url='https://github.com/kelsoncm/django_brfied',
     keywords=['django', 'BR', 'Brazil', 'Brasil', 'model', 'form', 'locale', ],
     classifiers=[]
