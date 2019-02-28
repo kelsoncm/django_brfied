@@ -29,5 +29,5 @@ from django.utils.translation import gettext_lazy as _
 
 
 class BrfiedConfig(AppConfig):
-    name = 'django_brfied.django_brfied'
+    name = 'django_brfied'
     verbose_name = _("django_brfied")

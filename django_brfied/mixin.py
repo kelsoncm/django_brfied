@@ -24,9 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from __future__ import unicode_literals
 from django.db import models
 from django.db.models import CharField, DateField
-from python_brfied import UF_LIST
-from python_brfied import ZonaChoices
-from django_brfied.django_brfied.models import CEPField, UFField, MunicipioField
+from python_brfied.choices import UnidadeFederativaEnum, ZonaEnum
+from django_brfied.models import CEPField, UFField, MunicipioField
 
 
 __author__ = 'Kelson da Costa Medeiros <kelsoncm@gmail.com>'
@@ -40,7 +39,33 @@ class EnderecoMixin(models.Model):
     endereco_municipio = MunicipioField(null=False, blank=False)
     endereco_cep = CEPField(null=False, blank=False)
     endereco_referencia = CharField('Referência', max_length=150, null=False, blank=False)
-    endereco_zona = CharField('Zona residencial', max_length=150, choices=ZonaChoices.CHOICES, null=False, blank=False)
+    endereco_zona = CharField('Zona residencial', max_length=150, choices=ZonaEnum.CHOICES, null=False, blank=False)
+
+    class Meta:
+        abstract = True
+
+    @property
+    def endereco(self):
+        return '%s, %s - %s, %s, %s' % \
+               (self.endereco_logradouro, self.endereco_numero, self.endereco_complemento, self.endereco_bairro,
+                self.endereco_municipio, )
+
+    @property
+    def enderecamento_correios(self):
+        return '%s %s %s\n%s\n%s\n%s' % \
+               (self.endereco_logradouro, self.endereco_numero, self.endereco_complemento, self.endereco_bairro,
+                self.endereco_municipio, self.endereco_cep,)
+
+
+class EnderecoFacultativoMixin(models.Model):
+    endereco_logradouro = CharField('Logradouro', max_length=150, null=True, blank=True)
+    endereco_numero = CharField('Número', max_length=150, null=True, blank=True)
+    endereco_complemento = CharField('Complemento', max_length=150, null=True, blank=True)
+    endereco_bairro = CharField('Bairro', max_length=150, null=True, blank=True)
+    endereco_municipio = MunicipioField(null=True, blank=True)
+    endereco_cep = CEPField(null=True, blank=True)
+    endereco_referencia = CharField('Referência', max_length=150, null=True, blank=True)
+    endereco_zona = CharField('Zona residencial', max_length=150, choices=ZonaEnum.CHOICES, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -61,7 +86,7 @@ class EnderecoMixin(models.Model):
 class RegistroGeralMixin(models.Model):
     rg_numero = CharField('Número do RG', max_length=20, null=False, blank=False)
     rg_orgao = CharField('Órgão expedidor do RG', max_length=20, null=False, blank=False)
-    rg_uf = UFField('UF de expedição do RG', max_length=2, choices=UF_LIST, null=False, blank=False)
+    rg_uf = UFField('UF de expedição do RG', max_length=2, choices=UnidadeFederativaEnum.CHOICES, null=False, blank=False)
 
     class Meta:
         abstract = True

@@ -26,8 +26,8 @@ from django.db.models import Model, CharField
 from django.db.models import ForeignKey as OriginalForeignKey, ManyToManyField as OriginalManyToManyField
 from python_brfied import validate_dv_by_mask, validate_mask, validate_mod11, validate_cnpj
 from python_brfied import only_digits, apply_mask, ValidationException
-from python_brfied import CPF_MASK, CNPJ_MASK, CEP_MASK, RegiaoChoices
-from python_brfied import SexoChoices
+from python_brfied import CPF_MASK, CNPJ_MASK, CEP_MASK
+from python_brfied.choices import SexoEnum, RegiaoEnum
 from django_brfied import forms
 from django_brfied.validators import CPFValidator
 
@@ -164,28 +164,28 @@ class ManyToManyField(OriginalManyToManyField):
 class SexoField(CharField):
     description = "Sex"
 
-    def __init__(self, verbose_name='Sexo', max_length=1, choices=SexoChoices.CHOICES, *args, **kwargs):
+    def __init__(self, verbose_name='Sexo', max_length=1, choices=SexoEnum.CHOICES, *args, **kwargs):
         super(SexoField, self).__init__(verbose_name=verbose_name, max_length=max_length, choices=choices,
                                         *args, **kwargs)
 
     def deconstruct(self):
         name, path, args, kwargs = super(SexoField, self).deconstruct()
         kwargs['max_length'] = 1
-        kwargs['choices'] = SexoChoices.CHOICES
+        kwargs['choices'] = SexoEnum.CHOICES
         return name, path, args, kwargs
 
 
 class URL(CharField):
     description = "Sex"
 
-    def __init__(self, verbose_name='Sexo', max_length=1, choices=SexoChoices.CHOICES, *args, **kwargs):
+    def __init__(self, verbose_name='Sexo', max_length=1, choices=SexoEnum.CHOICES, *args, **kwargs):
         super(SexoField, self).__init__(verbose_name=verbose_name, max_length=max_length, choices=choices,
                                         *args, **kwargs)
 
     def deconstruct(self):
         name, path, args, kwargs = super(SexoField, self).deconstruct()
         kwargs['max_length'] = 1
-        kwargs['choices'] = SexoChoices.CHOICES
+        kwargs['choices'] = SexoEnum.CHOICES
         return name, path, args, kwargs
 
 
@@ -193,7 +193,7 @@ class UnidadeFederativa(Model):
     sigla = CharField('Sigla', max_length=2, primary_key=True)
     codigo = CharField('Código', max_length=2, unique=True)
     nome = CharField('Nome', max_length=250)
-    regiao = CharField('Região', max_length=2, choices=RegiaoChoices.CHOICES)
+    regiao = CharField('Região', max_length=2, choices=RegiaoEnum.CHOICES)
 
     class Meta:
         verbose_name = 'Unidade federativa'

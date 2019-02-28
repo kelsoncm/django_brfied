@@ -1,14 +1,5 @@
-import os
-from collections import OrderedDict
-
-from django.apps import apps
-from django.contrib.staticfiles.finders import get_finders
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.core.files.storage import FileSystemStorage
-from django.core.management.base import BaseCommand, CommandError
-from django.core.management.color import no_style
-from django.utils.functional import cached_property
-from django_brfied.django_brfied.models import UnidadeFederativa, Municipio
+from django.core.management.base import BaseCommand
+from django_brfied.models import UnidadeFederativa, Municipio
 from ...migrations import UNIDADE_FEDERATIVA_ROWS, MUNICIPIO_ROWS
 
 
